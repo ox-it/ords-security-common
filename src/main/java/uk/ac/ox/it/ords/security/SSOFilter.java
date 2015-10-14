@@ -42,6 +42,12 @@ public class SSOFilter extends AuthenticatingFilter {
 		try {
 			AuthenticationToken token = createToken(request, response);
 			Subject subject = getSubject(request, response);
+			//
+			// We have to logout first to ensure stateless operation, as 
+			// even with session persistence off we still retain the 
+			// same principal if we call login()
+			//
+			subject.logout();
 			subject.login(token);
 			if (subject.isAuthenticated()){
 				return true;
