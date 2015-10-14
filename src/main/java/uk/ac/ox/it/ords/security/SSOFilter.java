@@ -28,13 +28,11 @@ public class SSOFilter extends AuthenticatingFilter {
 
 	@Override
 	protected AuthenticationToken createToken(ServletRequest request,
-			ServletResponse response) throws Exception {
-				
-		String user = ((HttpServletRequest)request).getRemoteUser();			
+			ServletResponse response) throws Exception {	
+		String user = ((HttpServletRequest)request).getRemoteUser();
 		String affiliation = (String)request.getAttribute("affiliation");
 		if (affiliation == null) affiliation = "";
 		RemoteUserToken token = new RemoteUserToken(user, affiliation);
-
 		return token;
 	}
 	
@@ -45,10 +43,18 @@ public class SSOFilter extends AuthenticatingFilter {
 			AuthenticationToken token = createToken(request, response);
 			Subject subject = getSubject(request, response);
 			subject.login(token);
-			return subject.isAuthenticated();
+			if (subject.isAuthenticated()){
+				return true;
+			};
 		} catch (Exception e) {
-			return false;
 		}
+		if (isPermissive(mappedValue)){
+			RemoteUserToken token = new RemoteUserToken("anonymous", "");
+			Subject subject = getSubject(request, response);
+			subject.login(token);
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -57,9 +63,8 @@ public class SSOFilter extends AuthenticatingFilter {
 		((HttpServletResponse)response).sendError(HttpServletResponse.SC_FORBIDDEN);
 		return false;
 	}
-
-
-
+	
+	
 
 
 }

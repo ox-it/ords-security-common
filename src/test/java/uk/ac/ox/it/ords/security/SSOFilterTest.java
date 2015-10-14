@@ -98,5 +98,17 @@ public class SSOFilterTest extends AbstractShiroTest{
 		filter.onAccessDenied(request, response);
 		verify(response).sendError(403);
 	}
+	
+	@Test
+	public void checkPermissive() throws Exception{
+		SSOFilter filter = new SSOFilter();
+		HttpServletRequest request = mock(HttpServletRequest.class);
+		HttpServletResponse response = mock(HttpServletResponse.class);
+		when(request.getRemoteUser()).thenReturn(null);
+		when(request.getAttribute("affiliation")).thenReturn(null);
+		String[] config = new String[1];
+		config[0] = "permissive";
+		assertTrue(filter.isAccessAllowed(request, response, config));
+	}
 
 }
