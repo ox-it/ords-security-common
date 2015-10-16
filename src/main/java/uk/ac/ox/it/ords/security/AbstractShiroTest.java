@@ -17,6 +17,8 @@ package uk.ac.ox.it.ords.security;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.UnavailableSecurityManagerException;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.subject.support.SubjectThreadState;
@@ -75,6 +77,20 @@ public abstract class AbstractShiroTest {
     protected static SecurityManager getSecurityManager() {
         return SecurityUtils.getSecurityManager();
     }
+    
+
+	/**
+	 * Simulate a logged-in user for when calling the REST API
+	 * 
+	 * @param user
+	 * @param password
+	 */
+	protected void login(String user, String password){
+		Subject subjectUnderTest = new Subject.Builder(getSecurityManager()).buildSubject();
+		setSubject(subjectUnderTest);
+		AuthenticationToken token = new UsernamePasswordToken(user, password);
+		subjectUnderTest.login(token);
+	}
 
     @AfterClass
     public static void tearDownShiro() {
