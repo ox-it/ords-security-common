@@ -91,6 +91,20 @@ public abstract class AbstractShiroTest {
 		AuthenticationToken token = new UsernamePasswordToken(user, password);
 		subjectUnderTest.login(token);
 	}
+	
+	/**
+	 * Simulate a logged-in user for when calling the REST API
+	 * 
+	 * @param user
+	 * @param password
+	 */
+	protected void loginUsingSSO(String user, String affiliation){
+		Subject subjectUnderTest = new Subject.Builder(getSecurityManager()).buildSubject();
+		setSubject(subjectUnderTest);
+		AuthenticationToken token = new RemoteUserToken(user, affiliation);
+		subjectUnderTest.login(token);
+	}
+
 
     @AfterClass
     public static void tearDownShiro() {
