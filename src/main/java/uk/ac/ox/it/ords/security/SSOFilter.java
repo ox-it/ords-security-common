@@ -57,6 +57,7 @@ public class SSOFilter extends AuthenticatingFilter {
 		if (isPermissive(mappedValue)){
 			RemoteUserToken token = new RemoteUserToken("anonymous", "");
 			Subject subject = getSubject(request, response);
+			subject.logout();
 			subject.login(token);
 			return true;
 		}
