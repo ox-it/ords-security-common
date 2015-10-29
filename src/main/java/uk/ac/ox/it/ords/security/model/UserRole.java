@@ -20,8 +20,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "userrole")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserRole {
 
     @Id
