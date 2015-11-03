@@ -2,6 +2,7 @@ package uk.ac.ox.it.ords.security.services.impl.hibernate;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +29,17 @@ public class PermissionsServiceImpl extends AbstractPermissionsService
 		Session session = this.sessionFactory.getCurrentSession();
 		session.beginTransaction();
 		try {
-			session.save(permission);
+			
+			//
+			// Check if this already exists
+			//
+			Permission existingPermission = (Permission) session.createCriteria(Permission.class)
+					.add(Restrictions.eq("permission", permission.getPermission()))
+					.add(Restrictions.eq("role", permission.getRole()))
+					.uniqueResult();
+			if (existingPermission == null) { 
+				session.save(permission);
+			}
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			log.error("Error creating permission", e);
