@@ -21,6 +21,8 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
 
+import uk.ac.ox.it.ords.security.configuration.MetaConfiguration;
+
 public class HibernateUtils
 {
 	private static SessionFactory sessionFactory;
@@ -30,14 +32,18 @@ public class HibernateUtils
 	{
 		try
 		{
-			Configuration configuration = new Configuration().configure();
-
+			Configuration configuration;
+			String hibernateConfigLocation = MetaConfiguration.getConfigurationLocation("hibernate");
+			if (hibernateConfigLocation == null){
+				configuration = new Configuration().configure();
+			} else {
+				configuration = new Configuration().configure(hibernateConfigLocation);
+			}
 			serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
 			sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 		}
 		catch (HibernateException he)
 		{
-			System.err.println("Error creating Session: " + he);
 			throw new ExceptionInInitializerError(he);
 		}
 	}
@@ -50,7 +56,6 @@ public class HibernateUtils
 
 	public static void closeSession() {
 		if (sessionFactory.getCurrentSession().getTransaction().isActive()){
-			System.out.println("!!!!!!!!!!! active transaction!");
 		}
 		sessionFactory.getCurrentSession().close();
 		
