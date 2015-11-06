@@ -1,3 +1,18 @@
+/*
+ * Copyright 2015 University of Oxford
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package uk.ac.ox.it.ords.security.services.impl.hibernate;
 
 import java.util.List;
@@ -27,6 +42,9 @@ public class PermissionsServiceImpl extends AbstractPermissionsService
 		setSessionFactory (HibernateUtils.getSessionFactory());
 	}
 
+	/* (non-Javadoc)
+	 * @see uk.ac.ox.it.ords.security.services.PermissionsService#createPermission(uk.ac.ox.it.ords.security.model.Permission)
+	 */
 	public void createPermission(Permission permission) throws Exception {
 		Session session = this.sessionFactory.getCurrentSession();
 		session.beginTransaction();
@@ -53,6 +71,9 @@ public class PermissionsServiceImpl extends AbstractPermissionsService
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see uk.ac.ox.it.ords.security.services.PermissionsService#deletePermission(uk.ac.ox.it.ords.security.model.Permission)
+	 */
 	public void deletePermission(Permission permission) throws Exception {
 		Session session = this.sessionFactory.getCurrentSession();
 		session.beginTransaction();
@@ -68,6 +89,9 @@ public class PermissionsServiceImpl extends AbstractPermissionsService
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see uk.ac.ox.it.ords.security.services.PermissionsService#getPermissionsForRole(java.lang.String)
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Permission> getPermissionsForRole(String role) throws Exception {
 		Session session = this.sessionFactory.getCurrentSession();
