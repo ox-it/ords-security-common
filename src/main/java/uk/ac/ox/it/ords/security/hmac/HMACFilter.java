@@ -1,4 +1,4 @@
-package uk.ac.ox.it.ords.security;
+package uk.ac.ox.it.ords.security.hmac;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -8,7 +8,6 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
 
 import uk.ac.ox.it.ords.security.configuration.HmacUserList;
-import uk.ac.ox.it.ords.security.hmac.Hmac;
 
 public class HMACFilter extends AuthenticatingFilter{
 	

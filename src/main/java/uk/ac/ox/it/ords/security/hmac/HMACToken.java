@@ -1,4 +1,4 @@
-package uk.ac.ox.it.ords.security;
+package uk.ac.ox.it.ords.security.hmac;
 
 import org.apache.shiro.authc.AuthenticationToken;
 
