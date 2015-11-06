@@ -1,5 +1,6 @@
 package uk.ac.ox.it.ords.security.services;
 
+import java.util.List;
 import java.util.ServiceLoader;
 
 import uk.ac.ox.it.ords.security.model.Permission;
@@ -9,6 +10,7 @@ public interface PermissionsService {
 	
 	public void createPermission(Permission permission) throws Exception;
 	public void deletePermission(Permission permission) throws Exception;
+	public List<Permission> getPermissionsForRole(String role) throws Exception;
 	
 	/**
 	 * Factory for obtaining implementations

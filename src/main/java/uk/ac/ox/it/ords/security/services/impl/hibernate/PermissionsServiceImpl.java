@@ -1,5 +1,7 @@
 package uk.ac.ox.it.ords.security.services.impl.hibernate;
 
+import java.util.List;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -44,7 +46,7 @@ public class PermissionsServiceImpl extends AbstractPermissionsService
 		} catch (Exception e) {
 			log.error("Error creating permission", e);
 			session.getTransaction().rollback();
-			throw new Exception("Cannot create project",e);
+			throw new Exception("Cannot create permission",e);
 		} finally {
 			HibernateUtils.closeSession();
 		}
@@ -52,8 +54,38 @@ public class PermissionsServiceImpl extends AbstractPermissionsService
 	}
 
 	public void deletePermission(Permission permission) throws Exception {
-		// TODO Auto-generated method stub
-		
+		Session session = this.sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		try {
+			session.delete(permission);
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			log.error("Error deleting permission", e);
+			session.getTransaction().rollback();
+			throw new Exception("Cannot delete permission",e);
+		} finally {
+			HibernateUtils.closeSession();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Permission> getPermissionsForRole(String role) throws Exception {
+		Session session = this.sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		List<Permission> permissions = null;
+		try {
+			permissions = session.createCriteria(Permission.class)
+					.add(Restrictions.eq("role", role))
+					.list();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			log.error("Error creating permission", e);
+			session.getTransaction().rollback();
+			throw new Exception("Cannot list permissions",e);
+		} finally {
+			HibernateUtils.closeSession();
+		}
+		return permissions;
 	}
 
 }
