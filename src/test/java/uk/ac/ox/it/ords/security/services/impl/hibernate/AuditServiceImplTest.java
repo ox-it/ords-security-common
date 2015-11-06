@@ -1,0 +1,69 @@
+/*
+ * Copyright 2015 University of Oxford
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package uk.ac.ox.it.ords.security.services.impl.hibernate;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+import uk.ac.ox.it.ords.security.model.Audit;
+import uk.ac.ox.it.ords.security.services.AuditService;
+
+public class AuditServiceImplTest {
+	
+	@Test
+	public void createAuditRecordByProject(){
+		Audit audit = new Audit();
+		audit.setProjectId(12345);
+		audit.setUserId("a.user@somewhere.com");
+		audit.setMessage("Test Audit Record");
+		audit.setAuditType("TEST");
+		AuditService.Factory.getInstance().createNewAudit(audit);
+		
+		assertEquals(1, AuditService.Factory.getInstance().getAuditListForProject(12345).size());
+		assertEquals(1, AuditService.Factory.getInstance().getAuditListForUser("a.user@somewhere.com").size());
+		
+		assertEquals("a.user@somewhere.com", AuditService.Factory.getInstance().getAuditListForProject(12345).get(0).getUserId());
+		assertEquals("Test Audit Record", AuditService.Factory.getInstance().getAuditListForProject(12345).get(0).getMessage());
+		assertEquals("TEST", AuditService.Factory.getInstance().getAuditListForProject(12345).get(0).getAuditType());
+		assertNotNull(AuditService.Factory.getInstance().getAuditListForProject(12345).get(0).getTimeOfOperation());
+
+
+		
+		audit = new Audit();
+		audit.setProjectId(12468);
+		audit.setUserId("a.user@somewhere.com");
+		audit.setMessage("Test Audit Record 2");
+		audit.setAuditType("TEST");
+		AuditService.Factory.getInstance().createNewAudit(audit);
+		
+		assertEquals(1, AuditService.Factory.getInstance().getAuditListForProject(12468).size());
+		assertEquals(1, AuditService.Factory.getInstance().getAuditListForProject(12345).size());
+	}
+	
+	@Test
+	public void createAuditRecordByUser(){
+		Audit audit = new Audit();
+		audit.setProjectId(12345);
+		audit.setUserId("another.user@somewhere.com");
+		audit.setMessage("Test Audit Record");
+		audit.setAuditType("TEST");
+		AuditService.Factory.getInstance().createNewAudit(audit);
+		
+		assertEquals(1, AuditService.Factory.getInstance().getAuditListForUser("another.user@somewhere.com").size());
+	}
+
+}

@@ -59,7 +59,9 @@ public class AuditServiceImpl implements AuditService {
 		List<Audit> auditRecords = null;
 		try {
 			session.beginTransaction();
-			auditRecords = session.createCriteria(Audit.class).add(Restrictions.eq("projectId", projectId)).list();
+			auditRecords = session.createCriteria(Audit.class)
+					.add(Restrictions.eq("projectId", projectId))
+					.list();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			log.error("Error creating audit record", e);
@@ -79,7 +81,9 @@ public class AuditServiceImpl implements AuditService {
 		List<Audit> auditRecords = null;
 		try {
 			session.beginTransaction();
-			auditRecords = session.createCriteria(Audit.class).add(Restrictions.eq("userId", userId)).list();
+			auditRecords = session.createCriteria(Audit.class)
+					.add(Restrictions.eq("userId", userId))
+					.list();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			log.error("Error creating audit record", e);
