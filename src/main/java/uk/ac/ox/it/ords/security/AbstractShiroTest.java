@@ -104,21 +104,6 @@ public abstract class AbstractShiroTest {
 		AuthenticationToken token = new RemoteUserToken(user, affiliation);
 		subjectUnderTest.login(token);
 	}
-	
-	/**
-	 * Simulate a logged-in user for when calling the REST API using HMAC
-	 * 
-	 * @param user
-	 * @param password
-	 */
-	protected void loginUsingHMAC(String key, String secret){
-		Subject subjectUnderTest = new Subject.Builder(getSecurityManager()).buildSubject();
-		setSubject(subjectUnderTest);
-		
-		AuthenticationToken token = new HMACToken(key, secret);
-		subjectUnderTest.login(token);
-	}
-
 
     @AfterClass
     public static void tearDownShiro() {
