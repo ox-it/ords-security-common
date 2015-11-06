@@ -24,12 +24,6 @@ import uk.ac.ox.it.ords.security.services.impl.hibernate.AuditServiceImpl;
 public interface AuditService {
 	
 	/**
-     * Create audit message that the user is not authorised to perform a specific action
-     * @param request the action that is not authorised
-     */
-    public void createNotAuthRecord(String request);
-
-	/**
 	 * getAuditListForProject
 	 * @param projectId
 	 * @return List<Audit>: A list of audit objects associated with that project id

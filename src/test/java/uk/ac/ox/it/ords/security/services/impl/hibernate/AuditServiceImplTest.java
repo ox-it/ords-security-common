@@ -39,6 +39,8 @@ public class AuditServiceImplTest {
 		assertEquals("a.user@somewhere.com", AuditService.Factory.getInstance().getAuditListForProject(12345).get(0).getUserId());
 		assertEquals("Test Audit Record", AuditService.Factory.getInstance().getAuditListForProject(12345).get(0).getMessage());
 		assertEquals("TEST", AuditService.Factory.getInstance().getAuditListForProject(12345).get(0).getAuditType());
+		assertEquals(12345, AuditService.Factory.getInstance().getAuditListForProject(12345).get(0).getProjectId());
+
 		assertNotNull(AuditService.Factory.getInstance().getAuditListForProject(12345).get(0).getTimeOfOperation());
 
 

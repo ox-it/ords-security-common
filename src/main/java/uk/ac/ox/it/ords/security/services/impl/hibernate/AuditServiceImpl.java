@@ -41,16 +41,6 @@ public class AuditServiceImpl implements AuditService {
 	}
 
 	/* (non-Javadoc)
-	 * @see uk.ac.ox.it.ords.security.services.AuditService#createNotAuthRecord(java.lang.String, int)
-	 */
-	public void createNotAuthRecord(String request) {
-		Audit audit = new Audit();
-		audit.setAuditType(Audit.AuditType.GENERIC_NOTAUTH.name());
-		audit.setMessage(request);
-		createNewAudit(audit);
-	}
-
-	/* (non-Javadoc)
 	 * @see uk.ac.ox.it.ords.security.services.AuditService#getAuditListForProject(int)
 	 */
 	@SuppressWarnings("unchecked")
