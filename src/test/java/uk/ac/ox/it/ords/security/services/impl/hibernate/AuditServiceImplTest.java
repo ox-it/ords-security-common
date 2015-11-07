@@ -42,6 +42,7 @@ public class AuditServiceImplTest {
 		assertEquals(12345, AuditService.Factory.getInstance().getAuditListForProject(12345).get(0).getProjectId());
 
 		assertNotNull(AuditService.Factory.getInstance().getAuditListForProject(12345).get(0).getTimeOfOperation());
+		assertTrue(AuditService.Factory.getInstance().getAuditListForProject(12345).get(0).getAuditId() > 0);
 
 
 		
