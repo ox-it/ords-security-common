@@ -83,13 +83,12 @@ public class Audit implements Serializable{
 		return message;
 	}
 	
-	
     public void setMessage(String message) {
         if (message == null) {
             this.message = "";
         }
-        else if (message.length() > 10000) {
-            this.message = message.substring(0, 9999);
+        else if (message.length() > 1000) {
+            this.message = message.substring(0, 999);
         }
         else {
             this.message = message;
