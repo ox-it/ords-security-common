@@ -26,6 +26,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @SuppressWarnings("serial")
 @Entity
@@ -35,6 +36,7 @@ public class Audit implements Serializable{
 	
     @Id
     @GeneratedValue
+    @JsonProperty
     private int auditId;
     
     public enum AuditType { GENERIC_NOTAUTH, LOGIN, LOGIN_FAILED, LOGOFF, SIGNUP, SIGNUP_FAILED,
@@ -59,9 +61,11 @@ public class Audit implements Serializable{
      * This is the user who causes the audit - i.e. the actor
      */
     private String userId;
-    private Timestamp timeOfOperation = new Timestamp(new Date().getTime());// = new Date(System.currentTimeMillis());
-
     
+    @JsonProperty
+    private Timestamp timeOfOperation = new Timestamp(new Date().getTime());
+
+    @JsonProperty
 	public int getAuditId() {
 		return auditId;
 	}
@@ -107,6 +111,7 @@ public class Audit implements Serializable{
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
+    @JsonProperty
 	public Timestamp getTimeOfOperation() {
 		return timeOfOperation;
 	}
