@@ -15,30 +15,60 @@
  */
 package uk.ac.ox.it.ords.security.services.impl.hibernate;
 
+import java.io.File;
+
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.ac.ox.it.ords.security.configuration.MetaConfiguration;
+import uk.ac.ox.it.ords.security.model.Audit;
+import uk.ac.ox.it.ords.security.model.Permission;
+import uk.ac.ox.it.ords.security.model.UserRole;
 
 public class HibernateUtils
 {
 	private static SessionFactory sessionFactory;
 	private static ServiceRegistry serviceRegistry;
 	
-	private static void init()
+	private static Logger log = LoggerFactory.getLogger(HibernateUtils.class);
+	
+	protected static String HIBERNATE_CONFIGURATION_PROPERTY = "ords.hibernate.configuration";
+	
+	protected static Configuration configuration;
+	
+	/**
+	 * Add the class mappings for this module
+	 */
+	protected static void addMappings(){
+		configuration.addAnnotatedClass(Permission.class);
+		configuration.addAnnotatedClass(Audit.class);
+		configuration.addAnnotatedClass(UserRole.class);
+	}
+	
+	protected static void init()
 	{
 		try
 		{
-			Configuration configuration;
-			String hibernateConfigLocation = MetaConfiguration.getConfiguration().getString("hibernate.configuration");			
+			String hibernateConfigLocation = MetaConfiguration.getConfiguration().getString(HIBERNATE_CONFIGURATION_PROPERTY);			
 			if (hibernateConfigLocation == null){
+				log.warn("No hibernate configuration found; using default hibernate.cfg.xml");
 				configuration = new Configuration().configure();
 			} else {
-				configuration = new Configuration().configure(hibernateConfigLocation);
+				log.info("Hibernate configuration found; using configuration from "+hibernateConfigLocation);
+				configuration = new Configuration().configure(new File(hibernateConfigLocation));
 			}
+			
+			//
+			// Add class mappings. Note we do this programmatically as this is
+			// completely independent of the database configuration.
+			//
+			addMappings();
+			
 			serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
 			sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 		}
