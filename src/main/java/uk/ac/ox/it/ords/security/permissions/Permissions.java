@@ -37,7 +37,22 @@ public class Permissions {
 	public static final String PROJECT_VIEW_PUBLIC = "project:view-public";
 	
 	// common database permissions shared between database-service and database-structure-service
+
+	public static String DATABASE_ANY_ACTION(int id){
+		return "database:*:"+id;
+	}
+	public static String DATABASE_DELETE(int id){
+		return "database:delete:"+id;
+	}
 	
+	public static String DATABASE_MODIFY(int id){
+		return "database:modify:"+id;
+	}
+	
+	public static String DATABASE_VIEW(int id){
+		return "database:view:"+id;
+	}
+
 	public static final String DATABASE_CREATE = "database:create";
 	public static final String DATABASE_CREATE_FULL = "database:create-full";
 	public static final String DATABASE_UPDATE_ALL = "database:update:*";
