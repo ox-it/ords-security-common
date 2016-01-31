@@ -36,12 +36,8 @@ public class SessionStorage {
     private final File diskFile;
 
     SessionStorage(final String name) {
-    	
         storeName = name;
         diskFile = new File(System.getProperty("java.io.tmpdir"), name);
-        
-        System.out.println("####Session storage is at:"+diskFile.getAbsolutePath());
-
     }
 
     void initStore(Serializable itemToStore){
