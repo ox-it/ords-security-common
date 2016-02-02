@@ -22,6 +22,8 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.SimpleSession;
 import org.apache.shiro.session.mgt.eis.CachingSessionDAO;
 
+import uk.ac.ox.it.ords.security.services.SessionStorageService;
+
 /**
  * A very basic SSO DAO for sessions stored on disk; only use this if for some reason
  * you can't make use of the standard Shiro EnterpriseDAO with ehcache.
@@ -57,16 +59,27 @@ public class SSOSessionDAO extends CachingSessionDAO{
 
 	@Override
 	protected void doDelete(Session session) {
-        load();
-        map.remove(session.getId());
-        store();
+		String sessionId = ((SimpleSession)session).getId().toString();
+		try {
+			SessionStorageService.Factory.getInstance().deleteSession(sessionId);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	protected void doUpdate(Session session) {
-        load();
-        map.put(session.getId(), session);
-        store();	
+		String sessionId = ((SimpleSession)session).getId().toString();
+		try {
+			SessionStorageService.Factory.getInstance().updateSession(sessionId, session);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+       // load();
+        //map.put(session.getId(), session);
+       // store();	
 	}
 
 	@Override
@@ -83,25 +96,41 @@ public class SSOSessionDAO extends CachingSessionDAO{
             throw new IllegalArgumentException("Unexpected session class for session: " + session);
         }
 
-        load();
-        map.put(sessionId, session);
-        store();
+        try {
+			SessionStorageService.Factory.getInstance().createSession(sessionId.toString(), session);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+     
+        //load();
+        //map.put(sessionId, session);
+        //store();
         return sessionId;
 	}
 
 	@Override
 	protected Session doReadSession(Serializable sessionId) {
-        load();
-        return map.get(sessionId);
+        //load();
+        
+        try {
+			SimpleSession session = (SimpleSession) SessionStorageService.Factory.getInstance().readSession(sessionId.toString());
+	        return session;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+        
 	}
 	
-    private synchronized void store() {
-        storage.store(map);
-    }
+   // private synchronized void store() {
+   //     storage.store(map);
+   // }
 
-    @SuppressWarnings("unchecked")
-	private synchronized void load() {
-        map = (Hashtable<Serializable, Session>) storage.load();
-    }
+   // @SuppressWarnings("unchecked")
+	//private synchronized void load() {
+   //     map = (Hashtable<Serializable, Session>) storage.load();
+  //  }
 
 }
