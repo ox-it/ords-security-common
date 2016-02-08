@@ -78,16 +78,18 @@ public class SessionStorageServiceImpl implements SessionStorageService {
 	}
 
 	public void deleteSession(String sessionId)  throws Exception{
+		
+		SimpleSession simpleSession = (SimpleSession) readSession(sessionId);
+		
 		org.hibernate.Session hsession = this.sessionFactory.getCurrentSession();
 		hsession.beginTransaction();
 		try {
-			SimpleSession simpleSession = (SimpleSession) hsession.get(SimpleSession.class, sessionId);
 			SimplePersistentSession sps = toSimplePersistentSession(simpleSession);
 			hsession.delete(sps);
 			hsession.getTransaction().commit();
 		} catch (Exception e) {
 			hsession.getTransaction().rollback();
-			throw new Exception("Cannot save session",e);
+			throw new Exception("Cannot delete session",e);
 		} finally {
 			HibernateUtils.closeSession();
 		}
