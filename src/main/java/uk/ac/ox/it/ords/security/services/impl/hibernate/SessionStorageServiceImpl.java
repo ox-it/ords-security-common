@@ -21,10 +21,12 @@ public class SessionStorageServiceImpl implements SessionStorageService {
 	}
 	
 	private Session fromSimplePersistentSession(SimplePersistentSession sps){
+		if (sps == null) return null;
 		return (Session) SerializationUtils.deserialize(sps.getSession());
 	}
 	
 	private SimplePersistentSession toSimplePersistentSession(SimpleSession session){
+		if (session == null) return null;
 		SimplePersistentSession sps = new SimplePersistentSession();
 		sps.setSessionId(session.getId().toString());
 		sps.setSession(SerializationUtils.serialize(session));

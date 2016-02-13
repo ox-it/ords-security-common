@@ -16,11 +16,12 @@
 package uk.ac.ox.it.ords.security;
 
 import java.io.Serializable;
-import java.util.Hashtable;
 
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.SimpleSession;
 import org.apache.shiro.session.mgt.eis.CachingSessionDAO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.ac.ox.it.ords.security.services.SessionStorageService;
 
@@ -48,13 +49,9 @@ import uk.ac.ox.it.ords.security.services.SessionStorageService;
  */
 public class SSOSessionDAO extends CachingSessionDAO{
 	
-    private Hashtable<Serializable, Session> map = new Hashtable<Serializable, Session>();
-    
-    private final SessionStorage storage;
-    
+	public static Logger log = LoggerFactory.getLogger(SSOSessionDAO.class);
+			      
     public SSOSessionDAO(){
-    	this.storage = new SessionStorage("ordsSessionStore");
-        storage.initStore(map);
     }
 
 	@Override
@@ -63,8 +60,7 @@ public class SSOSessionDAO extends CachingSessionDAO{
 		try {
 			SessionStorageService.Factory.getInstance().deleteSession(sessionId);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Error deleting session", e);
 		}
 	}
 
@@ -74,12 +70,8 @@ public class SSOSessionDAO extends CachingSessionDAO{
 		try {
 			SessionStorageService.Factory.getInstance().updateSession(sessionId, session);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Error updating session", e);
 		}
-       // load();
-        //map.put(session.getId(), session);
-       // store();	
 	}
 
 	@Override
@@ -99,38 +91,23 @@ public class SSOSessionDAO extends CachingSessionDAO{
         try {
 			SessionStorageService.Factory.getInstance().createSession(sessionId.toString(), session);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Error creating session", e);
 		}
-     
-        //load();
-        //map.put(sessionId, session);
-        //store();
+
         return sessionId;
 	}
 
 	@Override
 	protected Session doReadSession(Serializable sessionId) {
-        //load();
         
         try {
 			SimpleSession session = (SimpleSession) SessionStorageService.Factory.getInstance().readSession(sessionId.toString());
 	        return session;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Error reading session", e);
 			return null;
 		}
         
 	}
-	
-   // private synchronized void store() {
-   //     storage.store(map);
-   // }
-
-   // @SuppressWarnings("unchecked")
-	//private synchronized void load() {
-   //     map = (Hashtable<Serializable, Session>) storage.load();
-  //  }
 
 }

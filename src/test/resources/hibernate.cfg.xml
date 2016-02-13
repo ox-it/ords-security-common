@@ -21,5 +21,7 @@
         <property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
         <mapping class="uk.ac.ox.it.ords.security.model.Permission"/>
         <mapping class="uk.ac.ox.it.ords.security.model.Audit"/>
+        <mapping class="uk.ac.ox.it.ords.security.SimplePersistentSession"/>
+       
     </session-factory>
 </hibernate-configuration>
