@@ -12,6 +12,12 @@
         <url>https://api.bintray.com/maven/scottbw/ords/ords-security-common/;publish=1</url>
     </repository>
    </distributionManagement>
+   
+   	<scm>
+		<url>https://github.com/ox-it/ords-security-common</url>
+		<connection>scm:git:git://github.com/ox-it/ords-security-common.git</connection>
+		<developerConnection>scm:git:git@github.com:ox-it/ords-security-common.git</developerConnection>
+	</scm>
     
     <build>
         <plugins>
