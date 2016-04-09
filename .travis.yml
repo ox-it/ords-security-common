@@ -6,7 +6,7 @@ before_script:
   - psql -c 'create database ordstest owner ords;' -U postgres
 
 after_success:
-  - test "${TRAVIS_PULL_REQUEST}" == "false" && mvn deploy --settings settings.xml
+  - test "${TRAVIS_PULL_REQUEST}" == "false" && test "${TRAVIS_TAG}" != "" && mvn deploy --settings settings.xml
 
 env:
   global:
