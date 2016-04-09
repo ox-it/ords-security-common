@@ -49,6 +49,14 @@ public class ODBCServiceImpl implements ODBCService {
     	dropRole(role, server, database);
 	}
 	
+	/**
+	 * Executes a set of commands to drop all privileges for a selected role
+	 * @param odbcNameToRevoke
+	 * @param server
+	 * @param databaseName
+	 * @return
+	 * @throws Exception
+	 */
     protected boolean revokeFromDatabase(String odbcNameToRevoke, String server, String databaseName) throws Exception {
     	List<String> commandList = getRevokeStatement(odbcNameToRevoke, databaseName);
     	runSQLStatements(commandList, server, databaseName);
@@ -60,15 +68,40 @@ public class ODBCServiceImpl implements ODBCService {
     	return true;
     }
 	
+    /**
+     * Drops a role; first reassigning any objects owned by the role to
+     * the generic ORDS role.
+     * 
+     * @param role
+     * @param server
+     * @param database
+     * @throws Exception
+     */
     protected void dropRole(String role, String server, String database) throws Exception{
     	List<String> commandList = new ArrayList<String>();
-    	String query = String.format("DROP OWNED BY \"%s\"", role);
+    	//
+    	// Reassigns any remaining objects created by the role - for example, if this is an ODBC
+    	// role with WRITE access it could have created tables or views, and we don't want to
+    	// lose any of these. 
+    	//
+    	String query = String.format("REASSIGN OWNED BY \"%s\" TO \"ords\"", role);
     	commandList.add(query);
+    	//
+    	// Drops the rol
+    	//
     	query = String.format("DROP ROLE \"%s\"", role);
     	commandList.add(query);
     	this.runSQLStatements(commandList, server, database);
     }
 	
+    /**
+     * Gets a set of revoke statements for removing privileges for a role
+     * @param roleName
+     * @param databaseName
+     * @return
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     */
     protected List<String> getRevokeStatement(String roleName, String databaseName) throws ClassNotFoundException, SQLException {
     	List<String> commandList = new ArrayList<String>(); 
     	commandList.add(String.format("REVOKE ALL PRIVILEGES ON ALL TABLES IN SCHEMA \"%s\" FROM \"%s\";", SCHEMA_NAME, roleName));
@@ -81,6 +114,14 @@ public class ODBCServiceImpl implements ODBCService {
     	return String.format("alter default privileges in schema %s revoke all on tables from \"%s\" ;", SCHEMA_NAME, roleName);
     }
     
+    /**
+     * Executes a list of statements as the ORDS user	 
+     * @refactor move this to a generic support function as its not specific to ODBC services
+     * @param statements
+     * @param server
+     * @param databaseName
+     * @throws Exception
+     */
 	protected void runSQLStatements(List<String> statements, String server,
 			String databaseName) throws Exception {
 		Connection connection = null;
@@ -138,6 +179,16 @@ public class ODBCServiceImpl implements ODBCService {
 		return roles;
 	}
 	
+	/**
+	 * Runs a JDBC query as the ORDS user
+	 * @refactor move this to a generic support class as its not specific to ODBC services
+	 * @param query
+	 * @param parameters
+	 * @param server
+	 * @param databaseName
+	 * @return
+	 * @throws Exception
+	 */
 	protected CachedRowSet runJDBCQuery(String query, List<Object> parameters,
 			String server, String databaseName) throws Exception {
 		Connection connection = null;
