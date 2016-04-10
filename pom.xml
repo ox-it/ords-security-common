@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>uk.ac.ox.it.ords</groupId>
 	<artifactId>ords-security-common</artifactId>
-	<version>0.0.3</version>
+	<version>0.0.4-SNAPSHOT</version>
 
 	<distributionManagement>
 		<repository>
@@ -16,7 +16,7 @@
 		<url>https://github.com/ox-it/ords-security-common</url>
 		<connection>scm:git:git://github.com/ox-it/ords-security-common.git</connection>
 		<developerConnection>scm:git:git@github.com:ox-it/ords-security-common.git</developerConnection>
-		<tag>ords-security-common-0.0.3</tag>
+		<tag>ords-security-common-0.0.2</tag>
 	</scm>
 
 	<build>
