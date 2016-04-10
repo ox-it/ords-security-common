@@ -3,7 +3,38 @@
 	<groupId>uk.ac.ox.it.ords</groupId>
 	<artifactId>ords-security-common</artifactId>
 	<version>0.0.5-SNAPSHOT</version>
+    <name>${project.groupId}:${project.artifactId}</name>
+    <description>Common library code used by ORDS microservices</description>
+    <url>https://github.com/ox-it/ords-security-common</url>
+    
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
 
+    <developers>
+        <developer>
+            <name>Scott Wilson</name>
+            <email>scott.bradley.wilson@gmail.com</email>
+            <organization>Cetis</organization>
+            <organizationUrl>http://www.cetis.org.uk</organizationUrl>
+        </developer>
+        <developer>
+            <name>Kris Popat</name>
+            <email>kjpopat@gmail.com</email>
+            <organization>Cetis</organization>
+            <organizationUrl>http://www.cetis.org.uk</organizationUrl>
+        </developer>
+        <developer>
+            <name>David Paine</name>
+            <email>david.paine@it.ox.ac.uk</email>
+            <organization>University of Oxford</organization>
+            <organizationUrl>http://it.ox.ac.uk</organizationUrl>
+        </developer>
+    </developers>
+  
 	<distributionManagement>
 		<repository>
 			<id>bintray-scottbw-ords</id>
