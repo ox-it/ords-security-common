@@ -51,11 +51,11 @@ public class ODBCServiceImpl implements ODBCService {
 	
 	/**
 	 * Executes a set of commands to drop all privileges for a selected role
-	 * @param odbcNameToRevoke
-	 * @param server
-	 * @param databaseName
-	 * @return
-	 * @throws Exception
+	 * @param odbcNameToRevoke the ODBC role name
+	 * @param server the database server 
+	 * @param databaseName the database name
+	 * @return true; we'll remove this soon
+	 * @throws Exception if revocation fails
 	 */
     protected boolean revokeFromDatabase(String odbcNameToRevoke, String server, String databaseName) throws Exception {
     	List<String> commandList = getRevokeStatement(odbcNameToRevoke, databaseName);
@@ -72,10 +72,10 @@ public class ODBCServiceImpl implements ODBCService {
      * Drops a role; first reassigning any objects owned by the role to
      * the generic ORDS role.
      * 
-     * @param role
-     * @param server
-     * @param database
-     * @throws Exception
+     * @param role the role to drop
+     * @param server the database server
+     * @param database the database
+     * @throws Exception if dropping fails
      */
     protected void dropRole(String role, String server, String database) throws Exception{
     	List<String> commandList = new ArrayList<String>();
@@ -96,11 +96,11 @@ public class ODBCServiceImpl implements ODBCService {
 	
     /**
      * Gets a set of revoke statements for removing privileges for a role
-     * @param roleName
-     * @param databaseName
-     * @return
-     * @throws ClassNotFoundException
-     * @throws SQLException
+     * @param roleName the name of the role to revoke
+     * @param databaseName the database 
+     * @return List of revocation statements for the role and database
+     * @throws ClassNotFoundException if there is an SQL error
+     * @throws SQLException if there is an SQL error
      */
     protected List<String> getRevokeStatement(String roleName, String databaseName) throws ClassNotFoundException, SQLException {
     	List<String> commandList = new ArrayList<String>(); 
@@ -110,17 +110,22 @@ public class ODBCServiceImpl implements ODBCService {
     	return commandList;
     }
     
+    /**
+     * Gets the special revocation statement for this role
+     * @param roleName the role to revoke 
+     * @return the SQL statement
+     */
     protected String getSpecialRevokeStatement(String roleName) {
     	return String.format("alter default privileges in schema %s revoke all on tables from \"%s\" ;", SCHEMA_NAME, roleName);
     }
     
     /**
      * Executes a list of statements as the ORDS user	 
-     * @refactor move this to a generic support function as its not specific to ODBC services
-     * @param statements
-     * @param server
-     * @param databaseName
-     * @throws Exception
+     * TODO move this to a generic support function as its not specific to ODBC services
+     * @param statements the set of statements to execute
+     * @param server the database server
+     * @param databaseName the database
+     * @throws Exception if there is a problem executing the statements
      */
 	protected void runSQLStatements(List<String> statements, String server,
 			String databaseName) throws Exception {
@@ -152,9 +157,10 @@ public class ODBCServiceImpl implements ODBCService {
 	
 	/**
 	 * Gets all ODBC access roles for the specified database
-	 * @param database
-	 * @return
-	 * @throws Exception
+	 * @param databaseServer the database server to get roles from
+	 * @param databaseName the name of the database to get roles for
+	 * @return List of roles as Strings
+	 * @throws Exception if there is a problem obtaining the list of roles
 	 */
 	@Override
 	public List<String> getAllODBCRolesForDatabase(String databaseServer, String databaseName) throws Exception{
@@ -181,13 +187,13 @@ public class ODBCServiceImpl implements ODBCService {
 	
 	/**
 	 * Runs a JDBC query as the ORDS user
-	 * @refactor move this to a generic support class as its not specific to ODBC services
-	 * @param query
-	 * @param parameters
-	 * @param server
-	 * @param databaseName
-	 * @return
-	 * @throws Exception
+	 * TODO move this to a generic support class as its not specific to ODBC services
+	 * @param query the query to run
+	 * @param parameters the parameters to include in the statement
+	 * @param server the database server
+	 * @param databaseName the database
+	 * @return either a CachedRowSet of the result, or NULL if the query wasn't a SELECT
+	 * @throws Exception if there is a problem executing the query
 	 */
 	protected CachedRowSet runJDBCQuery(String query, List<Object> parameters,
 			String server, String databaseName) throws Exception {

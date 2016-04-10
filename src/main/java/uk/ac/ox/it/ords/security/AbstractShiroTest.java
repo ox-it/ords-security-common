@@ -52,6 +52,11 @@ public abstract class AbstractShiroTest {
         return SecurityUtils.getSubject();
     }
 
+    /**
+     * Create a threadstate for the given subject
+     * @param subject the test subject
+     * @return the threadState for the subject
+     */
     protected ThreadState createThreadState(Subject subject) {
         return new SubjectThreadState(subject);
     }
@@ -70,10 +75,18 @@ public abstract class AbstractShiroTest {
         }
     }
 
+    /**
+     * Set the security manager for testing
+     * @param securityManager the security manager for testing
+     */
     protected static void setSecurityManager(SecurityManager securityManager) {
         SecurityUtils.setSecurityManager(securityManager);
     }
 
+    /**
+     * Get the security manager for testing with
+     * @return a security manager instance
+     */
     protected static SecurityManager getSecurityManager() {
         return SecurityUtils.getSecurityManager();
     }
@@ -82,8 +95,8 @@ public abstract class AbstractShiroTest {
 	/**
 	 * Simulate a logged-in user for when calling the REST API
 	 * 
-	 * @param user
-	 * @param password
+	 * @param user the user name for the test subject
+	 * @param password the password for the test subject
 	 */
 	protected void login(String user, String password){
 		Subject subjectUnderTest = new Subject.Builder(getSecurityManager()).buildSubject();
@@ -95,8 +108,8 @@ public abstract class AbstractShiroTest {
 	/**
 	 * Simulate a logged-in user for when calling the REST API
 	 * 
-	 * @param user
-	 * @param password
+	 * @param user the user name for the test subject
+	 * @param affiliation the affiliation for the test subject
 	 */
 	protected void loginUsingSSO(String user, String affiliation){
 		Subject subjectUnderTest = new Subject.Builder(getSecurityManager()).buildSubject();

@@ -25,22 +25,21 @@ public interface AuditService {
 	
 	/**
 	 * getAuditListForProject
-	 * @param projectId
-	 * @return List<Audit>: A list of audit objects associated with that project id
+	 * @param projectId the project to get the audit list for
+	 * @return List of audit objects associated with that project id
 	 */
 	abstract List<Audit>getAuditListForProject( int projectId );
 	
 	/**
 	 * getAuditListForUser
-	 * @param userId
-	 * @return List<Audit>: A list of audit objects associated with the user id
+	 * @param userId the user to get the audit list for
+	 * @return List of audit objects associated with the user id
 	 */
 	abstract List<Audit>getAuditListForUser( String userId ) ;
 	
 	/**
 	 * createNewAudit
-	 * @param newAudit: an audit object initialized with the values to save
-	 * @return true or false
+	 * @param audit: an audit object initialized with the values to save
 	 */
 	abstract void createNewAudit( Audit audit );
 	
