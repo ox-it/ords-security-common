@@ -61,6 +61,28 @@ public class AuditServiceImpl implements AuditService {
 		}
 		return auditRecords;
 	}
+	
+	/* (non-Javadoc)
+	 * @see uk.ac.ox.it.ords.security.services.AuditService#getAuditListForDatabase(int)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Audit> getAuditListForDatabase(int logicalDatabaseId) {
+		Session session = this.sessionFactory.getCurrentSession();
+		List<Audit> auditRecords = null;
+		try {
+			session.beginTransaction();
+			auditRecords = session.createCriteria(Audit.class)
+					.add(Restrictions.eq("logicalDatabaseId", logicalDatabaseId))
+					.list();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			log.error("Error creating audit record", e);
+			session.getTransaction().rollback();
+		} finally {
+			HibernateUtils.closeSession();
+		}
+		return auditRecords;
+	}
 
 	/* (non-Javadoc)
 	 * @see uk.ac.ox.it.ords.security.services.AuditService#getAuditListForUser(java.lang.String)

@@ -31,6 +31,13 @@ public interface AuditService {
 	abstract List<Audit>getAuditListForProject( int projectId );
 	
 	/**
+	 * getAuditListForDatabase
+	 * @param logicalDatabaseId the database to get the audit list for
+	 * @return List of audit objects associated with that database id
+	 */
+	abstract List<Audit>getAuditListForDatabase( int logicalDatabaseId );
+	
+	/**
 	 * getAuditListForUser
 	 * @param userId the user to get the audit list for
 	 * @return List of audit objects associated with the user id

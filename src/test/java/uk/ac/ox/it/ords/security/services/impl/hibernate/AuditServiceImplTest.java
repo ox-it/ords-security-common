@@ -58,6 +58,40 @@ public class AuditServiceImplTest {
 	}
 	
 	@Test
+	public void createAuditRecordByDatabase(){
+		Audit audit = new Audit();
+		audit.setLogicalDatabaseId(99);
+		audit.setUserId("b.user@somewhere.com");
+		audit.setMessage("Test Audit Record");
+		audit.setAuditType("TEST");
+		AuditService.Factory.getInstance().createNewAudit(audit);
+		
+		assertEquals(1, AuditService.Factory.getInstance().getAuditListForDatabase(99).size());
+		assertEquals(1, AuditService.Factory.getInstance().getAuditListForUser("b.user@somewhere.com").size());
+		
+		assertEquals("b.user@somewhere.com", AuditService.Factory.getInstance().getAuditListForDatabase(99).get(0).getUserId());
+		assertEquals("Test Audit Record", AuditService.Factory.getInstance().getAuditListForDatabase(99).get(0).getMessage());
+		assertEquals("TEST", AuditService.Factory.getInstance().getAuditListForDatabase(99).get(0).getAuditType());
+		assertEquals(0, AuditService.Factory.getInstance().getAuditListForDatabase(99).get(0).getProjectId());
+		assertEquals(99, AuditService.Factory.getInstance().getAuditListForDatabase(99).get(0).getLogicalDatabaseId());
+
+		assertNotNull(AuditService.Factory.getInstance().getAuditListForDatabase(99).get(0).getTimeOfOperation());
+		assertTrue(AuditService.Factory.getInstance().getAuditListForDatabase(99).get(0).getAuditId() > 0);
+
+
+		
+		audit = new Audit();
+		audit.setLogicalDatabaseId(22);
+		audit.setUserId("b.user@somewhere.com");
+		audit.setMessage("Test Audit Record 2");
+		audit.setAuditType("TEST");
+		AuditService.Factory.getInstance().createNewAudit(audit);
+		
+		assertEquals(1, AuditService.Factory.getInstance().getAuditListForDatabase(22).size());
+		assertEquals(1, AuditService.Factory.getInstance().getAuditListForDatabase(99).size());
+	}
+	
+	@Test
 	public void createAuditRecordByUser(){
 		Audit audit = new Audit();
 		audit.setProjectId(12345);
