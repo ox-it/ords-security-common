@@ -57,6 +57,8 @@ public class Audit implements Serializable{
     
     private int projectId;
     
+    private int logicalDatabaseId;
+    
     /**
      * This is the user who causes the audit - i.e. the actor
      */
@@ -118,6 +120,14 @@ public class Audit implements Serializable{
     @JsonIgnore
 	public void setTimeOfOperation(Timestamp timeOfOperation) {
 		this.timeOfOperation = timeOfOperation;
+	}
+
+	public int getLogicalDatabaseId() {
+		return logicalDatabaseId;
+	}
+
+	public void setLogicalDatabaseId(int databaseId) {
+		this.logicalDatabaseId = databaseId;
 	}
 
     
