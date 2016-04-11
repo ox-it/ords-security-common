@@ -57,6 +57,10 @@ public class ODBCServiceImplTest extends ODBCServiceImpl{
 		ODBCService.Factory.getInstance().removeRole("test_ords_main_99_99", "localhost", "main_99_99");
 
 		assertEquals(0, ODBCService.Factory.getInstance().getAllODBCRolesForDatabase("localhost", "main_99_99").size());	
+		
+		commandList.clear();
+		commandList.add("drop database main_99_99;");
+		runSQLStatements(commandList, "localhost", "ordstest");
 
 	}
 	
