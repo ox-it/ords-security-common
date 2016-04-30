@@ -30,6 +30,7 @@ public interface ServerConfigurationService {
 	
 	/**
 	 * Gets the specified database server
+	 * @param host the host
 	 * @return a DatabaseServer instance
 	 * @throws Exception if the database configuration file is corrupt
 	 */

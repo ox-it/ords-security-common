@@ -78,8 +78,7 @@ public class ServerConfigurationServiceImpl implements ServerConfigurationServic
 
 	/**
 	 * Loads the configuration file
-	 * @return
-	 * @throws Exception
+	 * @throws Exception if there is a problem loading the file
 	 */
 	protected void load()  throws Exception {
 		
