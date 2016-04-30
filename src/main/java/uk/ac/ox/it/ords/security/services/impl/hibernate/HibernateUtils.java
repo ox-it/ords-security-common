@@ -27,8 +27,10 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.ox.it.ords.security.configuration.MetaConfiguration;
 import uk.ac.ox.it.ords.security.model.Audit;
+import uk.ac.ox.it.ords.security.model.DatabaseServer;
 import uk.ac.ox.it.ords.security.model.Permission;
 import uk.ac.ox.it.ords.security.model.UserRole;
+import uk.ac.ox.it.ords.security.services.ServerConfigurationService;
 
 public class HibernateUtils
 {
@@ -54,7 +56,12 @@ public class HibernateUtils
 	{
 		try
 		{
-			String hibernateConfigLocation = MetaConfiguration.getConfiguration().getString(HIBERNATE_CONFIGURATION_PROPERTY);			
+			String hibernateConfigLocation;
+			try {
+				hibernateConfigLocation = MetaConfiguration.getConfiguration().getString(HIBERNATE_CONFIGURATION_PROPERTY);
+			} catch (Exception e) {
+				hibernateConfigLocation = null;
+			}			
 			if (hibernateConfigLocation == null){
 				log.warn("No hibernate configuration found; using default hibernate.cfg.xml");
 				configuration = new Configuration().configure();
@@ -62,6 +69,14 @@ public class HibernateUtils
 				log.info("Hibernate configuration found; using configuration from "+hibernateConfigLocation);
 				configuration = new Configuration().configure(new File(hibernateConfigLocation));
 			}
+			
+			//
+			// Add server connection details
+			//
+			DatabaseServer databaseServer = ServerConfigurationService.Factory.getInstance().getOrdsDatabaseServer();
+			configuration.setProperty("hibernate.connection.url", databaseServer.getUrl());
+			configuration.setProperty("hibernate.connection.username", databaseServer.getUsername());
+			configuration.setProperty("hibernate.connection.password", databaseServer.getPassword());
 			
 			//
 			// Add class mappings. Note we do this programmatically as this is
@@ -72,7 +87,7 @@ public class HibernateUtils
 			serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
 			sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 		}
-		catch (HibernateException he)
+		catch (Exception he)
 		{
 			throw new ExceptionInInitializerError(he);
 		}

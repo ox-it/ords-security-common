@@ -28,11 +28,12 @@ import java.util.Properties;
 import javax.sql.rowset.CachedRowSet;
 import javax.sql.rowset.RowSetProvider;
 
-import org.apache.commons.configuration.Configuration;
 import org.apache.log4j.Logger;
 
 import uk.ac.ox.it.ords.security.configuration.MetaConfiguration;
+import uk.ac.ox.it.ords.security.model.DatabaseServer;
 import uk.ac.ox.it.ords.security.services.ODBCService;
+import uk.ac.ox.it.ords.security.services.ServerConfigurationService;
 
 public class ODBCServiceImpl implements ODBCService {
 	
@@ -132,11 +133,15 @@ public class ODBCServiceImpl implements ODBCService {
 		Connection connection = null;
 		Properties connectionProperties = new Properties();
 		PreparedStatement preparedStatement = null;
-			Configuration config = MetaConfiguration.getConfiguration();
-			connectionProperties.put("user", config.getString(ORDS_DATABASE_USER));
-			connectionProperties.put("password", config.getString(ORDS_DATABASE_PASSWORD));
-		String connectionURL = "jdbc:postgresql://" + server + "/"
-				+ databaseName;
+		
+		DatabaseServer databaseServer = ServerConfigurationService.Factory.getInstance().getOrdsDatabaseServer();
+		
+		connectionProperties.put("user", databaseServer.getUsername());
+		connectionProperties.put("password", databaseServer.getPassword());
+		
+		if (databaseName == null) databaseName = databaseServer.getMasterDatabaseName();
+		String connectionURL = databaseServer.getUrl(databaseName);
+		
 		try {
 			connection = DriverManager.getConnection(connectionURL,
 					connectionProperties);
@@ -197,14 +202,18 @@ public class ODBCServiceImpl implements ODBCService {
 	 */
 	protected CachedRowSet runJDBCQuery(String query, List<Object> parameters,
 			String server, String databaseName) throws Exception {
+		
 		Connection connection = null;
 		Properties connectionProperties = new Properties();
 		PreparedStatement preparedStatement = null;
-		Configuration config = MetaConfiguration.getConfiguration();
-		connectionProperties.put("user", config.getString(ORDS_DATABASE_USER));
-		connectionProperties.put("password", config.getString(ORDS_DATABASE_PASSWORD));
-		String connectionURL = "jdbc:postgresql://" + server + "/"
-				+ databaseName;
+		
+		DatabaseServer databaseServer = ServerConfigurationService.Factory.getInstance().getOrdsDatabaseServer();
+		
+		connectionProperties.put("user", databaseServer.getUsername());
+		connectionProperties.put("password", databaseServer.getPassword());
+		
+		if (databaseName == null) databaseName = databaseServer.getMasterDatabaseName();
+		String connectionURL = databaseServer.getUrl(databaseName);
 		try {
 			connection = DriverManager.getConnection(connectionURL,
 					connectionProperties);
