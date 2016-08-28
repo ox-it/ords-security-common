@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>uk.ac.ox.it.ords</groupId>
 	<artifactId>ords-security-common</artifactId>
-	<version>0.0.8-SNAPSHOT</version>
+	<version>0.0.8</version>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>Common library code used by ORDS microservices</description>
     <url>https://github.com/ox-it/ords-security-common</url>
@@ -47,7 +47,7 @@
 		<url>https://github.com/ox-it/ords-security-common</url>
 		<connection>scm:git:git://github.com/ox-it/ords-security-common.git</connection>
 		<developerConnection>scm:git:git@github.com:ox-it/ords-security-common.git</developerConnection>
-		<tag>ords-security-common-0.0.2</tag>
+		<tag>ords-security-common-0.0.8</tag>
 	</scm>
 
 	<build>
