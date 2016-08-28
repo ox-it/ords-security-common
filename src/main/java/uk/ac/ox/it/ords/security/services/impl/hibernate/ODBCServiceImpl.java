@@ -134,7 +134,13 @@ public class ODBCServiceImpl implements ODBCService {
 		Properties connectionProperties = new Properties();
 		PreparedStatement preparedStatement = null;
 		
-		DatabaseServer databaseServer = ServerConfigurationService.Factory.getInstance().getOrdsDatabaseServer();
+		DatabaseServer databaseServer;
+		
+		if (server == null){
+			databaseServer = ServerConfigurationService.Factory.getInstance().getOrdsDatabaseServer();
+		} else {
+			databaseServer = ServerConfigurationService.Factory.getInstance().getDatabaseServer(server);
+		}
 		
 		connectionProperties.put("user", databaseServer.getUsername());
 		connectionProperties.put("password", databaseServer.getPassword());
@@ -207,7 +213,13 @@ public class ODBCServiceImpl implements ODBCService {
 		Properties connectionProperties = new Properties();
 		PreparedStatement preparedStatement = null;
 		
-		DatabaseServer databaseServer = ServerConfigurationService.Factory.getInstance().getOrdsDatabaseServer();
+		DatabaseServer databaseServer;
+		
+		if (server == null){
+			databaseServer = ServerConfigurationService.Factory.getInstance().getOrdsDatabaseServer();
+		} else {
+			databaseServer = ServerConfigurationService.Factory.getInstance().getDatabaseServer(server);
+		}
 		
 		connectionProperties.put("user", databaseServer.getUsername());
 		connectionProperties.put("password", databaseServer.getPassword());
