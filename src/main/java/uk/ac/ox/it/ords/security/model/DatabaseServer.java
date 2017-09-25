@@ -19,7 +19,8 @@ package uk.ac.ox.it.ords.security.model;
  * Configuration and credentials for a database server
  */
 public class DatabaseServer {
-	
+
+	private String alias;
 	private String host;
 	private int port;
 	private String username;
@@ -31,6 +32,12 @@ public class DatabaseServer {
 	 */
 	private String masterDatabaseName;
 	
+	public String getAlias() {
+		return alias;
+	}
+	public void setAlias(String alias) {
+		this.alias = alias;
+	}
 	public String getHost() {
 		return host;
 	}

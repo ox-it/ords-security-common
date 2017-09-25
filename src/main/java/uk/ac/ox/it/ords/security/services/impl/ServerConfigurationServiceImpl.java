@@ -120,6 +120,7 @@ public class ServerConfigurationServiceImpl implements ServerConfigurationServic
 		for (int i = 0; i < serverArray; i++){
 			DatabaseServer databaseServer = new DatabaseServer();
 			
+			databaseServer.setAlias(xmlServerConfiguration.getString("server("+i+")[@alias]"));
 			databaseServer.setHost(xmlServerConfiguration.getString("server("+i+")[@host]"));
 			databaseServer.setPort(xmlServerConfiguration.getInt("server("+i+")[@port]"));
 			databaseServer.setUsername(xmlServerConfiguration.getString("server("+i+")[@username]"));
@@ -130,6 +131,7 @@ public class ServerConfigurationServiceImpl implements ServerConfigurationServic
 		}
 		
 		metadataServer = new DatabaseServer();
+		metadataServer.setAlias(xmlServerConfiguration.getString("metadata(0)[@alias]"));
 		metadataServer.setHost(xmlServerConfiguration.getString("metadata(0)[@host]"));
 		metadataServer.setPort(xmlServerConfiguration.getInt("metadata(0)[@port]"));
 		metadataServer.setUsername(xmlServerConfiguration.getString("metadata(0)[@username]"));
@@ -150,8 +152,30 @@ public class ServerConfigurationServiceImpl implements ServerConfigurationServic
 
 	@Override
 	public DatabaseServer getDatabaseServer(String host) throws Exception {
+		
+		//
+		// Check by alias first
+		//
+		DatabaseServer server = getDatabaseServerByAlias(host);
+		if (server != null){
+			return server;
+		}
+		
+		//
+		// Then check by host
+		//
 		for (DatabaseServer databaseServer : servers){
 			if (databaseServer.getHost().equalsIgnoreCase(host)){
+				return databaseServer;
+			}
+		}
+		return null;
+	}
+	
+	@Override
+	public DatabaseServer getDatabaseServerByAlias(String alias) throws Exception {
+		for (DatabaseServer databaseServer : servers){
+			if (databaseServer.getAlias().equalsIgnoreCase(alias)){
 				return databaseServer;
 			}
 		}

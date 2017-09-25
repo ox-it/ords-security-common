@@ -16,6 +16,7 @@
 package uk.ac.ox.it.ords.security.services.impl.hibernate;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
@@ -35,6 +36,25 @@ public class ServerConfigurationServiceTest {
 		
 		assertEquals(1, ServerConfigurationService.Factory.getInstance().getAllDatabaseServers().size());
 		assertEquals(server, ServerConfigurationService.Factory.getInstance().getDatabaseServer("localhost"));
+	}
+
+	@Test
+	public void getServerByAlias() throws Exception{
+		DatabaseServer server = ServerConfigurationService.Factory.getInstance().getDatabaseServer();	
+		assertEquals("main", server.getAlias());
+		assertEquals("localhost", server.getHost());
+		assertEquals(5432, server.getPort());
+		assertEquals("ords", server.getUsername());
+		assertEquals("ords", server.getPassword());
+		assertEquals("ordstest", server.getMasterDatabaseName());
+		
+		assertEquals(1, ServerConfigurationService.Factory.getInstance().getAllDatabaseServers().size());
+		assertEquals(server, ServerConfigurationService.Factory.getInstance().getDatabaseServer("localhost"));
+		assertEquals(server, ServerConfigurationService.Factory.getInstance().getDatabaseServer("main"));
+		assertEquals(server, ServerConfigurationService.Factory.getInstance().getDatabaseServerByAlias("main"));
+		assertNull(ServerConfigurationService.Factory.getInstance().getDatabaseServerByAlias("banana"));
+		assertNull(ServerConfigurationService.Factory.getInstance().getDatabaseServer("banana"));
+
 	}
 
 }

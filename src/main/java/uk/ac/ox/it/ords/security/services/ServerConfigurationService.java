@@ -27,6 +27,14 @@ import uk.ac.ox.it.ords.security.services.impl.ServerConfigurationServiceImpl;
  *  implementations could use a database table, registry, or external API
  */
 public interface ServerConfigurationService {
+
+	/**
+	 * Gets the specified database server
+	 * @param alias the server alias
+	 * @return a DatabaseServer instance
+	 * @throws Exception if the database configuration file is corrupt
+	 */
+	public DatabaseServer getDatabaseServerByAlias(String alias) throws Exception;	
 	
 	/**
 	 * Gets the specified database server
